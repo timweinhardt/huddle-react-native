@@ -1,18 +1,28 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
+import ChecklistIcon from '@/assets/icons/checklist.svg';
+import GiftIcon from '@/assets/icons/gift.svg';
+import HomeIcon from '@/assets/icons/home.svg';
+import LetterIcon from '@/assets/icons/letter.svg';
+import UserIcon from '@/assets/icons/user.svg';
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Apercu, Colors } from '@/constants/theme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors['light'].tint,
+        tabBarInactiveTintColor: Colors['light'].tabIconDefault,
+        tabBarIconStyle: { 
+          marginBottom: 4
+        },
+        tabBarLabelStyle: {
+          fontFamily: Apercu.medium,
+          fontSize: 11,
+        },
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
@@ -20,14 +30,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <HomeIcon color={color} fill={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="training"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Training',
+          tabBarIcon: ({ color }) => <ChecklistIcon color={color} fill={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="feedback"
+        options={{
+          title: 'Feedback',
+          tabBarIcon: ({ color }) => <LetterIcon color={color} fill={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="rewards"
+        options={{
+          title: 'Rewards',
+          tabBarIcon: ({ color }) => <GiftIcon color={color} fill={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Your Profile',
+          tabBarIcon: ({ color }) => <UserIcon color={color} fill={color} />,
         }}
       />
     </Tabs>

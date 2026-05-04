@@ -1,12 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const HomeScreen = () => {
-
+const FeedbackScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>Latest Announcements</Text>
-    </View>
+      <View style={styles.container}>
+        <Text>Feedback</Text>
+      </View>
   );
 };
 
@@ -16,4 +15,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default FeedbackScreen;
