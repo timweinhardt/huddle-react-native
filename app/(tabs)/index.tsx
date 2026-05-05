@@ -51,6 +51,7 @@ const HomeScreen = () => {
             date={item.date}
             content={item.content}
             onPress={() => {}}
+            style={styles.card}
           />
         )}
       />
@@ -63,9 +64,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContainer: {
-    padding: 20,
-    gap: 10,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
     flexGrow: 1,
+  },
+  card: {
+    marginBottom: 10,
   },
 });
 

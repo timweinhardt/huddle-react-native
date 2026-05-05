@@ -14,12 +14,7 @@ const PostCard: React.FC<PostCardProps> = ({ avatarUrl, style }) => {
       {avatarUrl ? (
         <Image source={{ uri: avatarUrl }} style={styles.image} />
       ) : (
-        <UserIcon
-          color={Colors.textInverse}
-          fill={Colors.secondary}
-          width={22}
-          height={22}
-        />
+        <UserIcon style={styles.icon} />
       )}
     </View>
   );
@@ -41,6 +36,11 @@ const styles = StyleSheet.create({
   image: {
     width: 28,
     height: 28,
+  },
+  icon: {
+    maxWidth: 22,
+    maxHeight: 22,
+    color: Colors.muted,
   },
 });
 
