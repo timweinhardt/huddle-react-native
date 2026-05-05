@@ -1,5 +1,7 @@
+import PlusIcon from "@/assets/icons/plus.svg";
 import PostCard from "@/components/posts/PostCard";
 import Heading from "@/components/shared/Heading";
+import Button from "@/components/ui/Button";
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -42,7 +44,18 @@ const HomeScreen = () => {
         contentContainerStyle={styles.listContainer}
         data={data}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={() => <Heading>Latest Announcements</Heading>}
+        ListHeaderComponent={() => (
+          <>
+            <Heading>Latest Announcements</Heading>
+            <Button
+              iconLeft={PlusIcon}
+              variant="secondary"
+              text="Create New Post"
+              onPress={() => {}}
+              style={styles.button}
+            ></Button>
+          </>
+        )}
         renderItem={({ item }) => (
           <PostCard
             authorName={item.author}
@@ -62,6 +75,9 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  button: {
+    marginBottom: 15,
   },
   listContainer: {
     paddingHorizontal: 20,

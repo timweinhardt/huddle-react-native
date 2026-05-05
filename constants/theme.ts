@@ -8,6 +8,8 @@ import { Platform } from "react-native";
 export const Colors = {
   background: "#F7F7F7",
   primary: "#DD0033",
+  gradientStart: "#FF033B",
+  gradientEnd: "#CA0F1A",
   secondary: "#586771",
   muted: "#9AA5AC",
   accent: "#005174",
