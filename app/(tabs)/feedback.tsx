@@ -1,11 +1,15 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Heading from "@/components/shared/Heading";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const FeedbackScreen = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-      <View style={styles.container}>
-        <Text>Feedback</Text>
-      </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Heading>Feedback</Heading>
+    </View>
   );
 };
 

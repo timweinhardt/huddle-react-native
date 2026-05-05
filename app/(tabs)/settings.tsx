@@ -1,10 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Heading from "@/components/shared/Heading";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SettingsScreen = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      <Text>Your Profile</Text>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Heading>Your Profile</Heading>
     </View>
   );
 };

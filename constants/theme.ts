@@ -9,6 +9,7 @@ export const Colors = {
   background: "#F7F7F7",
   primary: "#DD0033",
   secondary: "#586771",
+  muted: "#9AA5AC",
   accent: "#005174",
   border: "#E1E7EB",
   card: "#FFFFFF",
@@ -17,7 +18,7 @@ export const Colors = {
   error: "#A20025",
   info: "#00B4CB",
   textPrimary: "#2D2926",
-  textSecondary: "#586771",
+  textSecondary: "#5B6871",
   textMuted: "#9AA5AC",
   textInverse: "#FFFFFF",
 };
@@ -58,4 +59,37 @@ export const Apercu = {
   regular: "Apercu-Regular",
   medium: "Apercu-Medium",
   bold: "Apercu-Bold",
+};
+
+export const TextStyles = {
+  heading: {
+    fontFamily: Apercu.bold,
+    fontSize: 24,
+    color: Colors.textPrimary,
+  },
+  body: {
+    fontFamily: Apercu.regular,
+    fontSize: 16,
+    color: Colors.textPrimary,
+  },
+  label: {
+    fontFamily: Apercu.medium,
+    fontSize: 14,
+    color: Colors.textSecondary,
+  },
+  title: {
+    fontFamily: Apercu.bold,
+    fontSize: 18,
+    color: Colors.textPrimary,
+  },
+  meta: {
+    fontFamily: Apercu.medium,
+    fontSize: 14,
+    color: Colors.textSecondary,
+  },
+  hint: {
+    fontFamily: Apercu.medium,
+    fontSize: 14,
+    color: Colors.textMuted,
+  },
 };
