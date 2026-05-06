@@ -12,6 +12,7 @@ export const Colors = {
   gradientEnd: "#CA0F1A",
   secondary: "#586771",
   muted: "#9AA5AC",
+  disabled: "#CCCCCC",
   accent: "#005174",
   border: "#E1E7EB",
   card: "#FFFFFF",

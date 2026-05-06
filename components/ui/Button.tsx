@@ -16,6 +16,7 @@ interface VariantConfig {
   containerStyle: ViewStyle;
   useGradient: boolean;
   activeOpacity: number;
+  disabledStyle: ViewStyle;
 }
 
 const VARIANT_CONFIG = {
@@ -24,6 +25,9 @@ const VARIANT_CONFIG = {
     containerStyle: {},
     useGradient: true,
     activeOpacity: 0.75,
+    disabledStyle: {
+      backgroundColor: Colors.disabled,
+    },
   },
   secondary: {
     contentColor: Colors.primary,
@@ -34,12 +38,14 @@ const VARIANT_CONFIG = {
     },
     useGradient: false,
     activeOpacity: 0.6,
+    disabledStyle: {},
   },
   transparent: {
     contentColor: Colors.primary,
     containerStyle: {},
     useGradient: false,
     activeOpacity: 0.6,
+    disabledStyle: {},
   },
 } satisfies Record<string, VariantConfig>;
 
@@ -76,16 +82,25 @@ const Button: React.FC<ButtonProps> = ({
   onPress,
   style,
 }) => {
-  const { contentColor, containerStyle, useGradient, activeOpacity } =
-    VARIANT_CONFIG[variant];
-  const ContentWrapper = useGradient ? GradientWrapper : View;
+  const {
+    contentColor,
+    containerStyle,
+    useGradient,
+    activeOpacity,
+    disabledStyle,
+  } = VARIANT_CONFIG[variant];
+  const ContentWrapper = useGradient && !disabled ? GradientWrapper : View;
 
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.container, containerStyle, style]}
+      style={[
+        styles.container,
+        disabled ? disabledStyle : containerStyle,
+        style,
+      ]}
     >
       <ContentWrapper style={styles.content}>
         {IconLeft && <IconLeft color={contentColor} />}

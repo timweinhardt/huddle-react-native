@@ -12,8 +12,10 @@
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "infoPlist": {
-        "UIUserInterfaceStyle": "Light"
-      }
+        "UIUserInterfaceStyle": "Light",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.timweinhardt.huddlereactnative"
     },
     "android": {
       "userInterfaceStyle": "light",
@@ -44,11 +46,19 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-image",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5ef57308-b253-40dc-9684-ad8ab323118c"
+      }
     }
   }
 }

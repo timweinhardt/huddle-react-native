@@ -1,28 +1,36 @@
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import "react-native-reanimated";
 
-import { CustomFonts } from '@/constants/theme';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CustomFonts } from "@/constants/theme";
+import React from "react";
+import { KeyboardProvider } from "react-native-keyboard-controller";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
+const InitialLayout = () => {
+  const isLoggedIn = false;
 
-export const unstable_settings = {
-  anchor: '(tabs)',
+  return (
+    <Stack>
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!isLoggedIn}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack.Protected>
+    </Stack>
+  );
 };
 
 export default function RootLayout() {
   useFonts(CustomFonts);
 
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <KeyboardProvider>
       <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <InitialLayout />
       </SafeAreaProvider>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    </KeyboardProvider>
   );
 }
