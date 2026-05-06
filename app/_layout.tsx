@@ -1,14 +1,40 @@
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import "react-native-reanimated";
 
 import { CustomFonts } from "@/constants/theme";
-import React from "react";
+import { AuthProvider, useAuthContext } from "@/context/AuthContext";
+import { queryClient } from "@/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Amplify } from "aws-amplify";
+import React, { useEffect } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolId: process.env.EXPO_PUBLIC_COGNITO_USER_POOL_ID as string,
+      userPoolClientId: process.env.EXPO_PUBLIC_COGNITO_CLIENT_ID as string,
+    },
+  },
+});
+
+SplashScreen.preventAutoHideAsync();
+
 const InitialLayout = () => {
-  const isLoggedIn = false;
+  const [fontsLoaded] = useFonts(CustomFonts);
+  const { isCheckingAuth, isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (fontsLoaded && !isCheckingAuth) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, isCheckingAuth]);
+
+  if (!fontsLoaded || isCheckingAuth) {
+    return null;
+  }
 
   return (
     <Stack>
@@ -24,13 +50,15 @@ const InitialLayout = () => {
 };
 
 export default function RootLayout() {
-  useFonts(CustomFonts);
-
   return (
-    <KeyboardProvider>
-      <SafeAreaProvider>
-        <InitialLayout />
-      </SafeAreaProvider>
-    </KeyboardProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <KeyboardProvider>
+          <SafeAreaProvider>
+            <InitialLayout />
+          </SafeAreaProvider>
+        </KeyboardProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

@@ -57,10 +57,11 @@ interface ButtonProps {
   iconRight?: React.FC<SvgProps>;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
 }
 
 const GradientWrapper: React.FC<{
-  style: ViewStyle;
+  style: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }> = ({ style, children }) => (
   <LinearGradient
@@ -81,6 +82,7 @@ const Button: React.FC<ButtonProps> = ({
   iconRight: IconRight,
   onPress,
   style,
+  contentStyle,
 }) => {
   const {
     contentColor,
@@ -102,7 +104,7 @@ const Button: React.FC<ButtonProps> = ({
         style,
       ]}
     >
-      <ContentWrapper style={styles.content}>
+      <ContentWrapper style={[styles.content, contentStyle]}>
         {IconLeft && <IconLeft color={contentColor} />}
         <Text style={[styles.text, { color: contentColor }]}>{text}</Text>
         {IconRight && <IconRight color={contentColor} />}
