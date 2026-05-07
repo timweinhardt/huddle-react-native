@@ -8,7 +8,6 @@ export default function PostsLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "Post",
           headerShown: false,
         }}
       />
