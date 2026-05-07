@@ -40,7 +40,9 @@ const PostCard: React.FC<PostCardProps> = ({
       <Card style={styles.card}>
         <View style={styles.header}>
           <Avatar avatarUrl={avatarUrl}></Avatar>
-          <Text style={styles.author}>{authorName}</Text>
+          <Text style={styles.author} numberOfLines={1}>
+            {authorName}
+          </Text>
         </View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>{formatLongDateTime(date)}</Text>

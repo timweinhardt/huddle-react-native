@@ -27,14 +27,14 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="posts"
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => <HomeIcon color={color} fill={color} />,
         }}
       />
       <Tabs.Screen
-        name="training"
+        name="training/index"
         options={{
           title: "Training",
           tabBarIcon: ({ color }) => (
@@ -43,21 +43,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="feedback"
+        name="feedback/index"
         options={{
           title: "Feedback",
           tabBarIcon: ({ color }) => <LetterIcon color={color} fill={color} />,
         }}
       />
       <Tabs.Screen
-        name="rewards"
+        name="rewards/index"
         options={{
           title: "Rewards",
           tabBarIcon: ({ color }) => <GiftIcon color={color} fill={color} />,
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="settings/index"
         options={{
           title: "Your Profile",
           tabBarIcon: ({ color }) => <UserIcon color={color} fill={color} />,

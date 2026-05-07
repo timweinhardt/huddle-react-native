@@ -1,10 +1,14 @@
-import { Post, PostResponse } from "@/types/Post";
+import { GetPostsByLocationIdResponse, Post } from "@/types/Post";
 import apiClient from "../client";
 
 export const postService = {
-  getPostsByLocationId: async (location_id: string): Promise<Post[]> => {
-    const response = await apiClient.get<PostResponse>(
-      `/posts?location_id=${location_id}`,
+  getPostById: async (postId: string): Promise<Post> => {
+    const response = await apiClient.get<Post>(`/posts/${postId}`);
+    return response.data;
+  },
+  getPostsByLocationId: async (locationId: string): Promise<Post[]> => {
+    const response = await apiClient.get<GetPostsByLocationIdResponse>(
+      `/posts?location_id=${locationId}`,
     );
     return response.data.posts;
   },

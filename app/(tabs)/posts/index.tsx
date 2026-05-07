@@ -5,6 +5,7 @@ import Heading from "@/components/shared/Heading";
 import Button from "@/components/ui/Button";
 import { Colors } from "@/constants/theme";
 import { usePosts } from "@/hooks/usePosts";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,7 +22,7 @@ const HomeScreen = () => {
     isLoading,
   } = usePosts("30023");
 
-  const [isErrorVisible, setIsErrorVisible] = useState(true);
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -29,8 +30,21 @@ const HomeScreen = () => {
     }
   }, [error]);
 
+  const HandlePostTouch = (id: string) => {
+    router.push({
+      pathname: "/posts/[id]",
+      params: { id: id },
+    });
+  };
+
   return (
     <View style={styles.container}>
+      <ErrorModal
+        errorCode={error?.message ?? ""}
+        visible={!!error && isErrorVisible}
+        onClose={() => setIsErrorVisible(false)}
+        subtitle="We're having some trouble loading this content. Please try again later."
+      />
       <FlatList
         style={{ paddingTop: insets.top }}
         contentContainerStyle={styles.listContainer}
@@ -63,16 +77,12 @@ const HomeScreen = () => {
             title={item.title}
             date={item.created_at}
             content={item.content}
-            onPress={() => {}}
+            onPress={() => {
+              HandlePostTouch(item.id);
+            }}
             style={styles.card}
           />
         )}
-      />
-      <ErrorModal
-        errorCode={error?.message ?? ""}
-        visible={!!error && isErrorVisible}
-        onClose={() => setIsErrorVisible(false)}
-        subtitle="We're having some trouble loading this content. Please try again later."
       />
     </View>
   );

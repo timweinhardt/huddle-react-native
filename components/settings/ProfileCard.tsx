@@ -23,7 +23,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     <Card style={[styles.card, style]}>
       <View style={styles.header}>
         <Avatar avatarUrl={avatarUrl}></Avatar>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name} numberOfLines={1}>
+          {name}
+        </Text>
       </View>
       <View style={styles.footer}>
         <Text style={styles.role}>{role}</Text>

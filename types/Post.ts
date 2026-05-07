@@ -1,4 +1,4 @@
-export interface PostResponse {
+export interface GetPostsByLocationIdResponse {
   posts: Post[];
 }
 
