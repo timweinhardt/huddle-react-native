@@ -1,4 +1,5 @@
 import { TextStyles } from "@/constants/theme";
+import { formatLongDateTime } from "@/utils/string";
 import React from "react";
 import {
   StyleProp,
@@ -42,7 +43,7 @@ const PostCard: React.FC<PostCardProps> = ({
           <Text style={styles.author}>{authorName}</Text>
         </View>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{formatLongDateTime(date)}</Text>
         <Text style={styles.content} numberOfLines={4}>
           {content}
         </Text>

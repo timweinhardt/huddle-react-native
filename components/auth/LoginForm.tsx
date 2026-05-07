@@ -1,15 +1,17 @@
-import isValidEmail from "@/app/utils/string";
+import ErrorModal from "@/components/shared/ErrorModal";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import TextField from "@/components/ui/TextField";
 import { Apercu, Colors } from "@/constants/theme";
 import { useLogin } from "@/hooks/useAuth";
+import { isValidEmail } from "@/utils/string";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailPasswordError, setEmailPasswordError] = useState("");
@@ -36,13 +38,13 @@ const LoginForm = () => {
             //router.push("/mfa"); // navigate to MFA screen if enabled
           }
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
           if (error.name === "NotAuthorizedException") {
             setEmailPasswordError("Incorrect email or password");
           } else if (error.name === "UserNotFoundException") {
             setEmailError("Could not find an account with this email");
           } else {
-            Alert.alert("Something went wrong. Please try again.");
+            setError(error.name);
             console.log(error);
           }
         },
@@ -55,6 +57,11 @@ const LoginForm = () => {
   return (
     <>
       {isPending ? <Spinner /> : null}
+      <ErrorModal
+        errorCode={error}
+        visible={!!error}
+        onClose={() => setError("")}
+      />
       <View style={styles.container}>
         <Text style={styles.title}>Log in</Text>
         <View>

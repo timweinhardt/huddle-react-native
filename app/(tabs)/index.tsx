@@ -1,49 +1,50 @@
 import PlusIcon from "@/assets/icons/plus.svg";
 import PostCard from "@/components/posts/PostCard";
+import ErrorModal from "@/components/shared/ErrorModal";
 import Heading from "@/components/shared/Heading";
 import Button from "@/components/ui/Button";
-import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { Colors } from "@/constants/theme";
+import { usePosts } from "@/hooks/usePosts";
+import React, { useEffect, useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
 
-  const data = [
-    {
-      id: "1",
-      title: "Inclement Weather Update",
-      author: "Tim Weinhardt",
-      date: "Jan 5th, 2026",
-      avatarUrl: "https://i.imgur.com/1jO6lgG.jpeg",
-      content:
-        "Please be advised that we will be having a delayed opening. Please check Slack before you come in to work to ensure you are still required. Stay tuned for more details.",
-    },
-    {
-      id: "2",
-      title: "Inclement Weather Update",
-      author: "Olivia Efford",
-      date: "Jan 5th, 2026",
-      content:
-        "Please be advised that we will be having a delayed opening. Please check Slack before you come in to work to ensure you are still required. Stay tuned for more details.",
-    },
-    {
-      id: "3",
-      title: "Inclement Weather Update",
-      author: "Ekampreet Kaur",
-      date: "Jan 5th, 2026",
-      content:
-        "Please be advised that we will be having a delayed opening. Please check Slack before you come in to work to ensure you are still required. Stay tuned for more details.",
-    },
-  ];
+  const {
+    data: posts,
+    error,
+    refetch,
+    isRefetching,
+    isPending,
+    isLoading,
+  } = usePosts("30023");
+
+  const [isErrorVisible, setIsErrorVisible] = useState(true);
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorVisible(true);
+    }
+  }, [error]);
 
   return (
     <View style={styles.container}>
       <FlatList
         style={{ paddingTop: insets.top }}
         contentContainerStyle={styles.listContainer}
-        data={data}
+        data={posts}
         keyExtractor={(item) => item.id}
+        refreshControl={
+          <RefreshControl
+            progressViewOffset={insets.top}
+            refreshing={isRefetching || isLoading || isPending}
+            onRefresh={refetch}
+            colors={[Colors.muted]}
+            tintColor={Colors.muted}
+          />
+        }
         ListHeaderComponent={() => (
           <>
             <Heading>Latest Announcements</Heading>
@@ -53,20 +54,25 @@ const HomeScreen = () => {
               text="Create New Post"
               onPress={() => {}}
               style={styles.button}
-            ></Button>
+            />
           </>
         )}
         renderItem={({ item }) => (
           <PostCard
-            authorName={item.author}
-            avatarUrl={item.avatarUrl}
+            authorName={item.author_id}
             title={item.title}
-            date={item.date}
+            date={item.created_at}
             content={item.content}
             onPress={() => {}}
             style={styles.card}
           />
         )}
+      />
+      <ErrorModal
+        errorCode={error?.message ?? ""}
+        visible={!!error && isErrorVisible}
+        onClose={() => setIsErrorVisible(false)}
+        subtitle="We're having some trouble loading this content. Please try again later."
       />
     </View>
   );
