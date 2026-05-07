@@ -1,5 +1,5 @@
+import apiClient from "@/api/client";
 import { GetPostsByLocationIdResponse, Post } from "@/types/Post";
-import apiClient from "../client";
 
 export const postService = {
   getPostById: async (postId: string): Promise<Post> => {

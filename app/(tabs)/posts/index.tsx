@@ -4,6 +4,7 @@ import ErrorModal from "@/components/shared/ErrorModal";
 import Heading from "@/components/shared/Heading";
 import Button from "@/components/ui/Button";
 import { Colors } from "@/constants/theme";
+import { useLocationUsers } from "@/hooks/useLocationUsers";
 import { usePosts } from "@/hooks/usePosts";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -23,6 +24,16 @@ const HomeScreen = () => {
   } = usePosts("30023");
 
   const [isErrorVisible, setIsErrorVisible] = useState(false);
+
+  const { data: users, isLoading: isUsersLoading } = useLocationUsers("30023");
+
+  const userMap = React.useMemo(() => {
+    if (!users) return {};
+
+    return Object.fromEntries(
+      users.map((user) => [user.id, `${user.first_name} ${user.last_name}`]),
+    );
+  }, [users]);
 
   useEffect(() => {
     if (error) {
@@ -53,7 +64,9 @@ const HomeScreen = () => {
         refreshControl={
           <RefreshControl
             progressViewOffset={insets.top}
-            refreshing={isRefetching || isLoading || isPending}
+            refreshing={
+              isRefetching || isLoading || isPending || isUsersLoading
+            }
             onRefresh={refetch}
             colors={[Colors.muted]}
             tintColor={Colors.muted}
@@ -73,7 +86,7 @@ const HomeScreen = () => {
         )}
         renderItem={({ item }) => (
           <PostCard
-            authorName={item.author_id}
+            authorName={userMap[item.author_id] ?? ""}
             title={item.title}
             date={item.created_at}
             content={item.content}

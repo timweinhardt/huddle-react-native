@@ -3,6 +3,7 @@ import Avatar from "@/components/shared/Avatar";
 import ErrorModal from "@/components/shared/ErrorModal";
 import Button from "@/components/ui/Button";
 import { Colors, TextStyles } from "@/constants/theme";
+import { useUserName } from "@/hooks/useLocationUsers";
 import { usePost } from "@/hooks/usePost";
 import { formatLongDateTime } from "@/utils/string";
 import { router, useLocalSearchParams } from "expo-router";
@@ -22,6 +23,8 @@ const PostScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { data: post, error, isLoading, isRefetching, refetch } = usePost(id);
+
+  const { fullName: authorName } = useUserName("30023", post?.author_id);
 
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
@@ -82,7 +85,7 @@ const PostScreen = () => {
               <View style={styles.header}>
                 <Avatar avatarUrl={""}></Avatar>
                 <Text style={styles.author} numberOfLines={1}>
-                  {post.author_id}
+                  {authorName}
                 </Text>
               </View>
               <Text style={styles.title}>{post.title}</Text>
