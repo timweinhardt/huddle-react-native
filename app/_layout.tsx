@@ -16,11 +16,10 @@ import * as Notifications from "expo-notifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldShowBanner: true,
     shouldShowList: true,
     shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
 
@@ -73,6 +72,6 @@ export default function RootLayout() {
           </SafeAreaProvider>
         </KeyboardProvider>
       </AuthProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
   );
 }
