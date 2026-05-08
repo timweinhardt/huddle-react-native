@@ -1,4 +1,5 @@
 import ChevronLeftIcon from "@/assets/icons/chevron-left.svg";
+import EditIcon from "@/assets/icons/edit.svg";
 import Avatar from "@/components/shared/Avatar";
 import ErrorModal from "@/components/shared/ErrorModal";
 import Button from "@/components/ui/Button";
@@ -67,14 +68,23 @@ const PostScreen = () => {
         }
       >
         <View style={[styles.container]}>
-          <Button
-            text="Back"
-            onPress={handleBackButton}
-            style={styles.backButton}
-            contentStyle={styles.backButtonContent}
-            variant="transparent"
-            iconLeft={ChevronLeftIcon}
-          />
+          <View style={styles.headerButtons}>
+            <Button
+              text="Back"
+              onPress={handleBackButton}
+              style={styles.backButton}
+              contentStyle={styles.backButtonContent}
+              variant="transparent"
+              iconLeft={ChevronLeftIcon}
+            />
+            <Button
+              text="Edit"
+              onPress={handleBackButton}
+              style={styles.backButton}
+              variant="secondary"
+              iconLeft={EditIcon}
+            />
+          </View>
           {isLoading && (
             <View style={styles.loadingContainer}>
               <Circle size={64} color={Colors.primary} />
@@ -121,6 +131,11 @@ const styles = StyleSheet.create({
   },
   backButtonContent: {
     paddingLeft: 0,
+  },
+  headerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   header: {
     flexDirection: "row",

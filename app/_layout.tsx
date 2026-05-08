@@ -4,7 +4,7 @@ import "react-native-reanimated";
 
 import { CustomFonts } from "@/constants/theme";
 import { AuthProvider, useAuthContext } from "@/context/AuthContext";
-import { useBootstrapLocationUsers } from "@/hooks/useBootstrapLocationUsers";
+import { useLocationUsers } from "@/hooks/useLocationUsers";
 import { queryClient } from "@/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Amplify } from "aws-amplify";
@@ -26,15 +26,15 @@ SplashScreen.preventAutoHideAsync();
 const InitialLayout = () => {
   const [fontsLoaded] = useFonts(CustomFonts);
   const { isCheckingAuth, isLoggedIn } = useAuthContext();
-  useBootstrapLocationUsers("30023");
+  const { isLoading } = useLocationUsers("30023");
 
   useEffect(() => {
-    if (fontsLoaded && !isCheckingAuth) {
+    if (fontsLoaded && !isCheckingAuth && !isLoading) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isCheckingAuth]);
+  }, [fontsLoaded, isCheckingAuth, isLoading]);
 
-  if (!fontsLoaded || isCheckingAuth) {
+  if (!fontsLoaded || isCheckingAuth || isLoading) {
     return null;
   }
 

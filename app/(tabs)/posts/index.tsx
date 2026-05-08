@@ -42,9 +42,15 @@ const HomeScreen = () => {
   }, [error]);
 
   const HandlePostTouch = (id: string) => {
-    router.push({
+    router.navigate({
       pathname: "/posts/[id]",
       params: { id: id },
+    });
+  };
+
+  const HandleCreatePostTouch = () => {
+    router.navigate({
+      pathname: "/posts/create",
     });
   };
 
@@ -79,13 +85,14 @@ const HomeScreen = () => {
               iconLeft={PlusIcon}
               variant="secondary"
               text="Create New Post"
-              onPress={() => {}}
+              onPress={HandleCreatePostTouch}
               style={styles.button}
             />
           </>
         )}
         renderItem={({ item }) => (
           <PostCard
+            postId={item.id}
             authorName={userMap[item.author_id] ?? ""}
             title={item.title}
             date={item.created_at}

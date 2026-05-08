@@ -2,6 +2,12 @@ export interface GetPostsByLocationIdResponse {
   posts: Post[];
 }
 
+export interface CreatePostRequest {
+  location_id: string;
+  title: string;
+  content: string;
+}
+
 export interface Post {
   id: string;
   author_id: string;

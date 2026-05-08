@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   TextInputProps,
+  TextStyle,
   View,
   ViewStyle,
 } from "react-native";
@@ -16,7 +17,9 @@ import {
 interface TextFieldProps extends TextInputProps {
   label?: string;
   error?: string;
+  inputContainerStyle?: ViewStyle;
   containerStyle?: ViewStyle;
+  textFieldStyle?: TextStyle;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -45,7 +48,7 @@ const TextField: React.FC<TextFieldProps> = ({
         ]}
       >
         <TextInput
-          style={[styles.input]}
+          style={[styles.input, style]}
           placeholderTextColor={Colors.textMuted}
           secureTextEntry={secureTextEntry ? passwordHidden : false}
           clearTextOnFocus={false}

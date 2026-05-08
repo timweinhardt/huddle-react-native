@@ -1,6 +1,11 @@
+import ActionModal from "@/components/shared/ActionModal";
+import Avatar from "@/components/shared/Avatar";
+import ErrorModal from "@/components/shared/ErrorModal";
+import Card from "@/components/ui/Card";
 import { TextStyles } from "@/constants/theme";
+import { useDeletePost } from "@/hooks/useDeletePost";
 import { formatLongDateTime } from "@/utils/string";
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -9,10 +14,9 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import Avatar from "../shared/Avatar";
-import Card from "../ui/Card";
 
 interface PostCardProps {
+  postId: string;
   authorName: string;
   avatarUrl?: string;
   title: string;
@@ -23,6 +27,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({
+  postId,
   authorName,
   avatarUrl,
   title,
@@ -31,27 +36,67 @@ const PostCard: React.FC<PostCardProps> = ({
   onPress,
   style,
 }) => {
+  const { mutate, error } = useDeletePost();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  const handleDelete = () => {
+    setIsDeleteModalOpen(false);
+    mutate(postId, {
+      onError: () => {
+        setTimeout(() => {
+          setIsErrorModalOpen(true);
+        }, 2000);
+      },
+    });
+  };
+
+  const handleLongPress = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
-    <TouchableOpacity
-      style={[styles.container, style]}
-      onPress={onPress}
-      activeOpacity={0.6}
-    >
-      <Card style={styles.card}>
-        <View style={styles.header}>
-          <Avatar avatarUrl={avatarUrl}></Avatar>
-          <Text style={styles.author} numberOfLines={1}>
-            {authorName}
+    <>
+      <ErrorModal
+        visible={isErrorModalOpen}
+        errorCode={error?.message ?? ""}
+        onClose={() => setIsErrorModalOpen(false)}
+        subtitle="We couldn't delete this post. Please try again later."
+      />
+      <ActionModal
+        title="Delete Post?"
+        subtitle="Are you sure that you would like to delete this post? This cannot be undone."
+        visible={isDeleteModalOpen}
+        actionLabel="Delete Post"
+        onAction={handleDelete}
+        onCancel={handleCancel}
+      ></ActionModal>
+      <TouchableOpacity
+        style={[styles.container, style]}
+        onPress={onPress}
+        activeOpacity={0.6}
+        onLongPress={handleLongPress}
+      >
+        <Card style={styles.card}>
+          <View style={styles.header}>
+            <Avatar avatarUrl={avatarUrl}></Avatar>
+            <Text style={styles.author} numberOfLines={1}>
+              {authorName}
+            </Text>
+          </View>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.date}>{formatLongDateTime(date)}</Text>
+          <Text style={styles.content} numberOfLines={4}>
+            {content}
           </Text>
-        </View>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.date}>{formatLongDateTime(date)}</Text>
-        <Text style={styles.content} numberOfLines={4}>
-          {content}
-        </Text>
-        <Text style={styles.seeMore}>Tap to see more</Text>
-      </Card>
-    </TouchableOpacity>
+          <Text style={styles.seeMore}>Tap to see more</Text>
+        </Card>
+      </TouchableOpacity>
+    </>
   );
 };
 

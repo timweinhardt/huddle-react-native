@@ -1,6 +1,10 @@
 import { userService } from "@/api/services/userService";
-import { locationUsersKey } from "@/hooks/useBootstrapLocationUsers";
 import { useQuery } from "@tanstack/react-query";
+
+export const locationUsersKey = (locationId: string) => [
+  "locationUsers",
+  locationId,
+];
 
 export function useLocationUsers(locationId: string) {
   return useQuery({
