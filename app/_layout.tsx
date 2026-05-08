@@ -34,7 +34,7 @@ const InitialLayout = () => {
     }
   }, [fontsLoaded, isCheckingAuth, isLoading]);
 
-  if (!fontsLoaded || isCheckingAuth || isLoading) {
+  if (!fontsLoaded || isCheckingAuth) {
     return null;
   }
 

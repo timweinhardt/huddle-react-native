@@ -8,27 +8,32 @@ interface LoginCredentials {
 }
 
 export function useLogin() {
-  const { setIsLoggedIn } = useAuthContext();
+  const { setIsLoggedIn, setUser } = useAuthContext();
 
   return useMutation({
     mutationFn: ({ email, password }: LoginCredentials) =>
       authService.login(email, password),
-    onSuccess: ({ nextStep }) => {
+    onSuccess: async ({ nextStep }) => {
       if (nextStep.signInStep === "DONE") {
+        try {
+          const attributes = await authService.fetchUserAttributes();
+          setUser(attributes);
+        } catch {
+          setUser(null);
+        }
         setIsLoggedIn(true);
-      } else {
-        // TODO
       }
     },
   });
 }
 
 export function useLogout() {
-  const { setIsLoggedIn } = useAuthContext();
+  const { setIsLoggedIn, setUser } = useAuthContext();
 
   return useMutation({
     mutationFn: () => authService.logout(),
     onSuccess: () => {
+      setUser(null);
       setIsLoggedIn(false);
     },
   });

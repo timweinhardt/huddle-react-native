@@ -15,14 +15,28 @@ export function useLocationUsers(locationId: string) {
   });
 }
 
-export function useUserName(locationId: string, userId?: string) {
+export function useLocationUser(locationId: string, userId?: string) {
   const { data } = useLocationUsers(locationId);
 
   const user = data?.find((u) => u.id === userId);
 
+  const membership = user?.memberships.find(
+    (m) => m.location_id === locationId,
+  );
+
+  const firstName = user?.first_name;
+  const lastName = user?.last_name;
+
+  const locationIds = user?.memberships.map((m) => m.location_id) ?? [];
+
   return {
-    firstName: user?.first_name,
-    lastName: user?.last_name,
-    fullName: user ? `${user.first_name} ${user.last_name}` : "Unknown User",
+    user,
+    userId: user?.id,
+    firstName,
+    lastName,
+    fullName: user ? `${firstName} ${lastName}` : undefined,
+    roles: membership?.roles ?? [],
+    membership,
+    locationIds,
   };
 }

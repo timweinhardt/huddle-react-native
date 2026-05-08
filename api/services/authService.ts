@@ -1,8 +1,9 @@
 import {
-    fetchAuthSession,
-    getCurrentUser,
-    signIn,
-    signOut,
+  fetchAuthSession,
+  fetchUserAttributes,
+  getCurrentUser,
+  signIn,
+  signOut,
 } from "aws-amplify/auth";
 
 export const authService = {
@@ -26,6 +27,14 @@ export const authService = {
   getCurrentUser: async () => {
     try {
       return await getCurrentUser();
+    } catch {
+      return null;
+    }
+  },
+
+  fetchUserAttributes: async () => {
+    try {
+      return await fetchUserAttributes();
     } catch {
       return null;
     }
