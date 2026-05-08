@@ -88,7 +88,9 @@ const PostCard: React.FC<PostCardProps> = ({
               {authorName}
             </Text>
           </View>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={3}>
+            {title}
+          </Text>
           <Text style={styles.date}>{formatLongDateTime(date)}</Text>
           <Text style={styles.content} numberOfLines={4}>
             {content}
