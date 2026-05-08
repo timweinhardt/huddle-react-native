@@ -6,63 +6,62 @@ import TextField from "@/components/ui/TextField";
 import { Apercu, Colors } from "@/constants/theme";
 import { useCreatePost } from "@/hooks/useCreatePost";
 import { router } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Keyboard, StyleSheet, Text, View } from "react-native";
 import {
   KeyboardAwareScrollView,
   KeyboardAwareScrollViewRef,
 } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+type CreatePostFormValues = {
+  title: string;
+  message: string;
+};
+
 const CreatePostScreen = () => {
   const insets = useSafeAreaInsets();
-
-  const { mutate, isPending, error } = useCreatePost();
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [isErrorVisible, setIsErrorVisible] = useState(false);
-
   const scrollViewRef = useRef<KeyboardAwareScrollViewRef>(null);
+  const { mutate, isPending, isError, error, reset } = useCreatePost();
 
-  const enableSubmit =
-    title.trim() !== "" && content.trim() !== "" && !isPending;
+  const {
+    control,
+    handleSubmit,
+    clearErrors,
+    formState: { isValid, errors, isDirty },
+  } = useForm<CreatePostFormValues>({
+    defaultValues: { title: "", message: "" },
+    reValidateMode: "onSubmit",
+  });
 
-  useEffect(() => {
-    if (error) {
-      setIsErrorVisible(true);
-    }
-  }, [error]);
-
-  const handleBackButton = () => {
-    router.back();
-  };
-
-  const handleSubmit = () => {
+  const onSubmit = ({ title, message }: CreatePostFormValues) => {
+    Keyboard.dismiss();
     mutate(
       {
         location_id: "30023",
         title,
-        content,
+        content: message,
       },
       {
         onSuccess: () => {
           router.back();
         },
-        onError: () => {
-          setIsErrorVisible(true);
-        },
       },
     );
   };
 
+  const handleBackButton = () => {
+    router.back();
+  };
+
   return (
     <>
-      {isPending ? <Spinner /> : null}
+      <Spinner isVisible={isPending} />
       <ErrorModal
-        visible={isErrorVisible}
+        visible={isError}
         errorCode={error instanceof Error ? error.message : "Unknown error"}
-        onClose={() => setIsErrorVisible(false)}
+        onClose={reset}
         subtitle="We couldn't create your post. Please try again later."
       />
       <KeyboardAwareScrollView
@@ -80,37 +79,62 @@ const CreatePostScreen = () => {
         />
         <Text style={styles.title}>Create New Post</Text>
         <View>
-          <TextField
-            label="Title"
-            placeholder="Enter the post title"
-            value={title}
-            onChangeText={(text) => {
-              setTitle(text);
+          <Controller
+            control={control}
+            name="title"
+            rules={{
+              required: "Title is required",
             }}
-            keyboardType="default"
-            autoCapitalize="none"
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                label="Title"
+                placeholder="Enter the post title"
+                value={value}
+                onChangeText={(text) => {
+                  onChange(text);
+                  if (errors.title) {
+                    clearErrors("title");
+                  }
+                }}
+                error={errors.title?.message}
+                keyboardType="default"
+              />
+            )}
           />
-          <TextField
-            label="Message"
-            placeholder="Type something..."
-            value={content}
-            onChangeText={(text) => {
-              setContent(text);
+          <Controller
+            control={control}
+            name="message"
+            rules={{
+              required: "Message is required",
             }}
-            keyboardType="default"
-            multiline
-            style={styles.contentTextField}
-            onFocus={() => {
-              scrollViewRef.current?.scrollToEnd({
-                animated: true,
-              });
-            }}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                label="Message"
+                placeholder="Type something..."
+                value={value}
+                onChangeText={(text) => {
+                  onChange(text);
+                  if (errors.message) {
+                    clearErrors("message");
+                  }
+                }}
+                error={errors.message?.message}
+                style={styles.contentTextField}
+                onFocus={() => {
+                  scrollViewRef.current?.scrollToEnd({
+                    animated: true,
+                  });
+                }}
+                multiline
+                keyboardType="default"
+              />
+            )}
           />
         </View>
         <Button
           text="Create Post"
-          disabled={!enableSubmit}
-          onPress={handleSubmit}
+          disabled={!isDirty || isPending || !isValid}
+          onPress={handleSubmit(onSubmit)}
         ></Button>
       </KeyboardAwareScrollView>
     </>

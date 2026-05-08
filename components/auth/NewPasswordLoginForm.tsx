@@ -3,61 +3,57 @@ import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import TextField from "@/components/ui/TextField";
 import { Apercu, Colors } from "@/constants/theme";
-import { useLogin } from "@/hooks/useAuth";
-import { isValidEmail } from "@/utils/string";
+import { useLoginNewPassword } from "@/hooks/useAuth";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, StyleSheet, Text, View } from "react-native";
 
-type LoginFormValues = {
-  email: string;
-  password: string;
+type NewPasswordLoginFormValues = {
+  newPassword: string;
+  repeatedNewPassword: string;
 };
 
-const LoginForm = () => {
+const NewPasswordLoginForm = () => {
   const router = useRouter();
-  const { mutate: login, isPending } = useLogin();
+  const { mutate: login, isPending } = useLoginNewPassword();
   const [error, setError] = useState("");
 
   const {
     control,
     handleSubmit,
-    clearErrors,
+    watch,
     setError: setFieldError,
+    clearErrors,
     formState: { isValid, errors, isDirty },
-  } = useForm<LoginFormValues>({
-    defaultValues: { email: "", password: "" },
+  } = useForm<NewPasswordLoginFormValues>({
+    defaultValues: { newPassword: "", repeatedNewPassword: "" },
     reValidateMode: "onSubmit",
   });
 
-  const onSubmit = ({ email, password }: LoginFormValues) => {
+  const password = watch("newPassword");
+
+  const onSubmit = ({
+    newPassword,
+    repeatedNewPassword,
+  }: NewPasswordLoginFormValues) => {
     Keyboard.dismiss();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     login(
-      { email, password },
+      { newPassword },
       {
-        onSuccess: ({ nextStep }) => {
+        onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          if (
-            nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
-          ) {
-            router.push("/new-password");
-          }
         },
         onError: (error: Error) => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           switch (error.name) {
-            case "NotAuthorizedException":
-              setFieldError("password", {
-                message: "Incorrect password",
-              });
-              break;
-
-            case "UserNotFoundException":
-              setFieldError("email", {
-                message: "Could not find an account with this email",
+            case "InvalidPasswordException":
+              setFieldError("newPassword", {
+                message: error.message.replace(
+                  "Password does not conform to policy: ",
+                  "",
+                ),
               });
               break;
 
@@ -70,7 +66,9 @@ const LoginForm = () => {
     );
   };
 
-  const handleForgotPassword = () => {};
+  const handleGoBack = () => {
+    router.back();
+  };
 
   return (
     <>
@@ -81,52 +79,25 @@ const LoginForm = () => {
         onClose={() => setError("")}
       />
       <View style={styles.container}>
-        <Text style={styles.title}>Log in</Text>
+        <Text style={styles.title}>Welcome!</Text>
+        <Text style={styles.subtitle}>Let’s create a new password for you</Text>
         <View>
           <Controller
             control={control}
-            name="email"
-            rules={{
-              required: "Email is required",
-              validate: (v) =>
-                isValidEmail(v) || "Please enter a valid email address",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextField
-                label="Email Address"
-                placeholder="Enter your email"
-                value={value}
-                onChangeText={(text) => {
-                  onChange(text);
-                  if (errors.email) {
-                    clearErrors("email");
-                  }
-                }}
-                error={errors.email?.message}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="email"
-                textContentType="emailAddress"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
+            name="newPassword"
             rules={{ required: "Password is required" }}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="Password"
-                placeholder="Enter your password"
+                label="New Password"
+                placeholder="Enter a new password"
                 value={value}
                 onChangeText={(text) => {
                   onChange(text);
-                  if (errors.password) {
-                    clearErrors("password");
+                  if (errors.newPassword) {
+                    clearErrors("newPassword");
                   }
                 }}
-                error={errors.password?.message}
+                error={errors.newPassword?.message}
                 textContentType="password"
                 autoCorrect={false}
                 autoComplete="password"
@@ -134,18 +105,41 @@ const LoginForm = () => {
               />
             )}
           />
+          <Controller
+            control={control}
+            name="repeatedNewPassword"
+            rules={{
+              required: "New Password",
+              validate: (value) =>
+                value === password || "Passwords do not match",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                label="Confirm New Password"
+                placeholder="Re-enter your new password"
+                value={value}
+                onChangeText={(text) => {
+                  onChange(text);
+                  if (errors.repeatedNewPassword) {
+                    clearErrors("repeatedNewPassword");
+                  }
+                }}
+                error={errors.newPassword?.message}
+                textContentType="password"
+                autoCorrect={false}
+                autoComplete="password-new"
+                secureTextEntry={true}
+              />
+            )}
+          />
         </View>
         <View style={styles.buttonGroup}>
           <Button
-            text="Log in"
+            text="Continue"
             disabled={!isDirty || isPending || !isValid}
             onPress={handleSubmit(onSubmit)}
           />
-          <Button
-            text="Forgot password?"
-            variant="secondary"
-            onPress={handleForgotPassword}
-          />
+          <Button text="Go Back" variant="secondary" onPress={handleGoBack} />
         </View>
       </View>
     </>
@@ -162,6 +156,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: Apercu.bold,
     color: Colors.textPrimary,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontFamily: Apercu.medium,
+    color: Colors.textPrimary,
     marginBottom: 10,
   },
   buttonGroup: {
@@ -169,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginForm;
+export default NewPasswordLoginForm;

@@ -7,6 +7,10 @@ interface LoginCredentials {
   password: string;
 }
 
+interface LoginNewPasswordCredentials {
+  newPassword: string;
+}
+
 export function useLogin() {
   const { setIsLoggedIn, setUser } = useAuthContext();
 
@@ -23,6 +27,23 @@ export function useLogin() {
         }
         setIsLoggedIn(true);
       }
+    },
+  });
+}
+
+export function useLoginNewPassword() {
+  const { setIsLoggedIn, setUser } = useAuthContext();
+  return useMutation({
+    mutationFn: ({ newPassword }: LoginNewPasswordCredentials) =>
+      authService.loginNewPassword(newPassword),
+    onSuccess: async () => {
+      try {
+        const attributes = await authService.fetchUserAttributes();
+        setUser(attributes);
+      } catch {
+        setUser(null);
+      }
+      setIsLoggedIn(true);
     },
   });
 }
