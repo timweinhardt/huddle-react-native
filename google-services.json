@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "986969799640",
+    "project_id": "cfa-huddle",
+    "storage_bucket": "cfa-huddle.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986969799640:android:cd474126acfce9e9a0d0ad",
+        "android_client_info": {
+          "package_name": "com.timweinhardt.huddlereactnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr3GMk4L-vzqHY4kR6O3ie6GkSqnV0Zf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
