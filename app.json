@@ -25,8 +25,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "monochromeImage": "./assets/adaptive-icon.png"
       },
+      "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.timweinhardt.huddlereactnative"
     },
     "web": {
       "output": "static",
@@ -44,6 +46,7 @@
         }
       ],
       "expo-font",
+      "expo-notifications",
       "expo-image",
       "expo-web-browser"
     ],

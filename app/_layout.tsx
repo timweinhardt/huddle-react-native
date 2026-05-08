@@ -12,6 +12,18 @@ import React, { useEffect } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 Amplify.configure({
   Auth: {
     Cognito: {
@@ -61,6 +73,6 @@ export default function RootLayout() {
           </SafeAreaProvider>
         </KeyboardProvider>
       </AuthProvider>
-    </QueryClientProvider>
+  </QueryClientProvider>
   );
 }
