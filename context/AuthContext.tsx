@@ -1,4 +1,6 @@
 import { authService } from "@/api/services/authService";
+import { notificationService } from "@/api/services/notificationService";
+import { registerForPushNotificationsAsync } from "@/utils/registerPush";
 import { UserAttributeKey } from "aws-amplify/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -34,6 +36,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const attributes = await authService.fetchUserAttributes();
           setUser(attributes);
           setIsLoggedIn(true);
+
+          registerForPushNotificationsAsync().then(
+              (token) => {
+                notificationService.registerPushToken({
+                  user_id: currentUser.userId,
+                  push_token: token,
+                });
+              }
+          );
         } else {
           setIsLoggedIn(false);
           setUser(null);
