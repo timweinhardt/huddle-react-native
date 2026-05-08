@@ -5,10 +5,12 @@
   },
   "build": {
     "development": {
+      "autoIncrement": true,
       "developmentClient": true,
       "distribution": "store"
     },
     "preview": {
+      "autoIncrement": true,
       "distribution": "store"
     },
     "production": {
