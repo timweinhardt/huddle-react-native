@@ -3,6 +3,7 @@ import {
   CreatePostRequest,
   GetPostsByLocationIdResponse,
   Post,
+  UpdatePostRequest,
 } from "@/types/Post";
 
 export const postService = {
@@ -22,6 +23,13 @@ export const postService = {
   },
   deletePost: async (postId: string): Promise<Post> => {
     const response = await apiClient.delete<Post>(`/posts/${postId}`);
+    return response.data;
+  },
+  updatePost: async (
+    postId: string,
+    payload: UpdatePostRequest,
+  ): Promise<Post> => {
+    const response = await apiClient.patch(`/posts/${postId}`, payload);
     return response.data;
   },
 };

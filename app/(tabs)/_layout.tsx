@@ -45,6 +45,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="feedback/index"
         options={{
+          href: null,
           title: "Feedback",
           tabBarIcon: ({ color }) => <LetterIcon color={color} fill={color} />,
         }}
@@ -52,6 +53,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="rewards/index"
         options={{
+          href: null,
           title: "Rewards",
           tabBarIcon: ({ color }) => <GiftIcon color={color} fill={color} />,
         }}

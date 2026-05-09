@@ -43,7 +43,7 @@ const LoginForm = () => {
           if (
             nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
           ) {
-            router.push("/new-password");
+            router.navigate("/new-password");
           }
         },
         onError: (error: Error) => {
