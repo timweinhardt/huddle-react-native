@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# secrets
+cfa-huddle-firebase-adminsdk-fbsvc-ac1eba7b5e.json
+
+
 # XCode
 build/
 credentials.json
