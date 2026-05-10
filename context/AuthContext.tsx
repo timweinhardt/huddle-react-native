@@ -1,5 +1,4 @@
 import { authService } from "@/api/services/authService";
-import { notificationService } from "@/api/services/notificationService";
 import { UserAttributeKey } from "aws-amplify/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -35,8 +34,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const attributes = await authService.fetchUserAttributes();
           setUser(attributes);
           setIsLoggedIn(true);
-
-          await notificationService.initializeForUser(currentUser.userId);
         } else {
           setIsLoggedIn(false);
           setUser(null);
