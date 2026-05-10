@@ -1,4 +1,5 @@
 import {
+  confirmSignIn,
   fetchAuthSession,
   fetchUserAttributes,
   getCurrentUser,
@@ -14,16 +15,18 @@ export const authService = {
     });
     return { isSignedIn, nextStep };
   },
-
   logout: async (global = false) => {
     await signOut({ global });
   },
-
+  loginNewPassword: async (newPassword: string) => {
+    await confirmSignIn({
+      challengeResponse: newPassword,
+    });
+  },
   getToken: async () => {
     const session = await fetchAuthSession();
     return session.tokens?.accessToken?.toString() ?? null;
   },
-
   getCurrentUser: async () => {
     try {
       return await getCurrentUser();
@@ -31,7 +34,6 @@ export const authService = {
       return null;
     }
   },
-
   fetchUserAttributes: async () => {
     try {
       return await fetchUserAttributes();

@@ -1,7 +1,6 @@
-import LoginForm from "@/components/auth/LoginForm";
+import NewPasswordLoginForm from "@/components/auth/NewPasswordLoginForm";
 import React from "react";
 import {
-  ImageBackground,
   Keyboard,
   Platform,
   StyleSheet,
@@ -10,33 +9,29 @@ import {
 } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
 
-const LoginScreen = () => {
+const NewPasswordScreen = () => {
   const offset = { closed: 0, opened: Platform.OS === "ios" ? 20 : 20 };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/images/waffle-fry-pattern.jpg")}
-          resizeMode="cover"
-          style={styles.image}
-        >
-          <KeyboardStickyView offset={offset} style={styles.footerContainer}>
-            <LoginForm />
-          </KeyboardStickyView>
-        </ImageBackground>
-      </View>
+      <KeyboardStickyView offset={offset} style={styles.footerContainer}>
+        <View style={styles.formContainer}>
+          <NewPasswordLoginForm />
+        </View>
+      </KeyboardStickyView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   image: {
     flex: 1,
     justifyContent: "flex-end",
+  },
+  formContainer: {
+    backgroundColor: "#ffffff",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   footerContainer: {
     position: "absolute",
@@ -45,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default NewPasswordScreen;

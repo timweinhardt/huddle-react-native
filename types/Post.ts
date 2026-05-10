@@ -8,6 +8,11 @@ export interface CreatePostRequest {
   content: string;
 }
 
+export interface UpdatePostRequest {
+  title: string;
+  content: string;
+}
+
 export interface Post {
   id: string;
   author_id: string;

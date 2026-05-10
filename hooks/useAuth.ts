@@ -1,3 +1,4 @@
+import { notificationService } from "@/api/services/notificationService";
 import { useAuthContext } from "@/context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "../api/services/authService";
@@ -5,6 +6,10 @@ import { authService } from "../api/services/authService";
 interface LoginCredentials {
   email: string;
   password: string;
+}
+
+interface LoginNewPasswordCredentials {
+  newPassword: string;
 }
 
 export function useLogin() {
@@ -17,6 +22,7 @@ export function useLogin() {
       if (nextStep.signInStep === "DONE") {
         try {
           const attributes = await authService.fetchUserAttributes();
+          await notificationService.initializeForUser(attributes?.sub);
           setUser(attributes);
         } catch {
           setUser(null);
@@ -27,12 +33,33 @@ export function useLogin() {
   });
 }
 
+export function useLoginNewPassword() {
+  const { setIsLoggedIn, setUser } = useAuthContext();
+  return useMutation({
+    mutationFn: ({ newPassword }: LoginNewPasswordCredentials) =>
+      authService.loginNewPassword(newPassword),
+    onSuccess: async () => {
+      try {
+        const attributes = await authService.fetchUserAttributes();
+        await notificationService.initializeForUser(attributes?.sub);
+        setUser(attributes);
+      } catch {
+        setUser(null);
+      }
+      setIsLoggedIn(true);
+    },
+  });
+}
+
 export function useLogout() {
   const { setIsLoggedIn, setUser } = useAuthContext();
 
   return useMutation({
-    mutationFn: () => authService.logout(),
-    onSuccess: () => {
+    mutationFn: async () => {
+      await notificationService.unregisterPushToken();
+      await authService.logout();
+    },
+    onSuccess: async () => {
       setUser(null);
       setIsLoggedIn(false);
     },

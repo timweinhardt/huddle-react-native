@@ -46,6 +46,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
     gap: 15,
     borderRadius: 8,
     padding: 20,

@@ -44,6 +44,10 @@ const PostScreen = () => {
     router.back();
   };
 
+  const handleEditButton = () => {
+    router.navigate(`/posts/${id}/edit`);
+  };
+
   return (
     <>
       <ErrorModal
@@ -79,7 +83,7 @@ const PostScreen = () => {
             />
             <Button
               text="Edit"
-              onPress={handleBackButton}
+              onPress={handleEditButton}
               style={styles.backButton}
               variant="secondary"
               iconLeft={EditIcon}

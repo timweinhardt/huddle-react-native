@@ -1,8 +1,9 @@
 import EyeOffIcon from "@/assets/icons/eye-off-outline.svg";
 import EyeIcon from "@/assets/icons/eye-outline.svg";
 import { Apercu, Colors } from "@/constants/theme";
+import { useShake } from "@/hooks/useShake";
 import * as Haptics from "expo-haptics";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -13,6 +14,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import Animated from "react-native-reanimated";
 
 interface TextFieldProps extends TextInputProps {
   label?: string;
@@ -37,14 +39,21 @@ const TextField: React.FC<TextFieldProps> = ({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
+  const { shake, animatedStyle } = useShake();
+
+  useEffect(() => {
+    if (error) shake();
+  }, [error, shake]);
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
 
-      <View
+      <Animated.View
         style={[
           styles.inputContainer,
           error ? styles.inputContainerError : null,
+          animatedStyle,
         ]}
       >
         <TextInput
@@ -66,7 +75,7 @@ const TextField: React.FC<TextFieldProps> = ({
             )}
           </Pressable>
         )}
-      </View>
+      </Animated.View>
 
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>

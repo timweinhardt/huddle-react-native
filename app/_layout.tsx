@@ -16,11 +16,10 @@ import * as Notifications from "expo-notifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldShowBanner: true,
     shouldShowList: true,
     shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
 
@@ -57,7 +56,7 @@ const InitialLayout = () => {
       </Stack.Protected>
 
       <Stack.Protected guard={!isLoggedIn}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack.Protected>
     </Stack>
   );
@@ -73,6 +72,6 @@ export default function RootLayout() {
           </SafeAreaProvider>
         </KeyboardProvider>
       </AuthProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
   );
 }
