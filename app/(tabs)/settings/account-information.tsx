@@ -8,7 +8,7 @@ import { TextStyles } from "@/constants/theme";
 import { useAuthContext } from "@/context/AuthContext";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SettingsScreen = () => {
@@ -19,6 +19,7 @@ const SettingsScreen = () => {
 
     const [firstName, setFirstName] = useState(user?.given_name);
     const [lastName, setLastName] = useState(user?.family_name);
+    const [email, setEmail] = useState(user?.email);
 
 
     const handleBackButton = () => {
@@ -44,71 +45,68 @@ const SettingsScreen = () => {
 
     return (
         <>
-            {isLoading && <Spinner />}
-            <View style={[styles.container, { paddingTop: insets.top }]}>
-                <Button
-                    text="Back"
-                    onPress={handleBackButton}
-                    style={styles.backButton}
-                    contentStyle={styles.backButtonContent}
-                    variant="transparent"
-                    iconLeft={ChevronLeftIcon}
-                />
-                <RouteHeading>Account Information</RouteHeading>
-                <Text style={[TextStyles.largeLabel, styles.label]}>First Name</Text>
-                <TextField
-                    style={styles.textFieldContainer}
-                    value={firstName}
-                    onChangeText={(text) => setFirstName(text)}
-                />
-                <Text style={[TextStyles.largeLabel, styles.label]}>Last Name</Text>
-                <TextField
-                    style={styles.textFieldContainer}
-                    value={lastName}
-                    onChangeText={(text) => setFirstName(text)}
-                />
-                <Text style={[TextStyles.largeLabel, styles.label]}>Email</Text>
-                <Card style={styles.emailCard}>
-                    <Text
-                        style={[styles.textField, styles.emailText]}
-                        numberOfLines={1}
-                        ellipsizeMode="middle"
-                    >
-                        {user?.email}
-                    </Text>
-               
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <Spinner isVisible={isLoading} />
+                    <View style={{ paddingTop: insets.top }}>
+                        <Button
+                            text="Back"
+                            onPress={handleBackButton}
+                            style={styles.backButton}
+                            contentStyle={styles.backButtonContent}
+                            variant="transparent"
+                            iconLeft={ChevronLeftIcon}
+                        />
+                        <RouteHeading>Account Information</RouteHeading>
+                        <Text style={[TextStyles.largeLabel, styles.label]}>First Name</Text>
+                        <TextField
+                            style={styles.textFieldContainer}
+                            value={firstName}
+                            onChangeText={(text) => setFirstName(text)}
+                        />
+                        <Text style={[TextStyles.largeLabel, styles.label]}>Last Name</Text>
+                        <TextField
+                            style={styles.textFieldContainer}
+                            value={lastName}
+                            onChangeText={(text) => setLastName(text)}
+                        />
+                        <Text style={[TextStyles.largeLabel, styles.label]}>Email</Text>
+                        <TextField
+                            style={styles.textFieldContainer}
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                        />
+                        <Text style={[TextStyles.largeLabel, styles.label]}>Profile Picture</Text>
+                        <Card style={styles.emailCard}>
+                            <Text>Change profile picture</Text>
+                            <Button
+                                text="Choose image"
+                                onPress={handleChangeProfilePicture}
+                                style={styles.changeButton}
+                                variant="secondaryMono"
+                            />
+                        </Card>
+                    </View>
                     <Button
-                        text="Change"
-                        onPress={handleChangeEmail}
-                        style={styles.changeButton}
-                        variant="secondaryMono"
+                        variant="primary"
+                        text="Update Profile"
+                        onPress={handleUpdateProfile}
+                        style={styles.updateProfileButton}
                     />
-                </Card>
-                <Text style={[TextStyles.largeLabel, styles.label]}>Profile Picture</Text>
-                <Card style={styles.emailCard}>
-                    <Text>Change profile picture</Text>
-                    <Button
-                        text="Choose image"
-                        onPress={handleChangeProfilePicture}
-                        style={styles.changeButton}
-                        variant="secondaryMono"
-                    />
-                </Card>
-                <Button
-                    variant="primary"
-                    text="Update Profile"
-                    onPress={handleUpdateProfile}
-                    style={styles.updateProfileButton}
-                />
-            </View>
+                </View>
+            </TouchableWithoutFeedback>
         </>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingBottom: 20,
         flex: 1,
+        justifyContent: "space-between",
+        flexDirection: "column",
+        height: "100%",
     },
     updateProfileButton: {
         marginTop: 20
@@ -132,12 +130,12 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end",
     },
     backButton: {
-      marginTop: 30,
-      alignSelf: "flex-start",
-      marginBottom: 10,
+        marginTop: 30,
+        alignSelf: "flex-start",
+        marginBottom: 10,
     },
     backButtonContent: {
-      paddingLeft: 0,
+        paddingLeft: 0,
     },
     label: {
         marginBottom: 6,
