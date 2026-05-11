@@ -25,7 +25,7 @@ const PostScreen = () => {
 
   const { data: post, error, isLoading, isRefetching, refetch } = usePost(id);
 
-  const { fullName: authorName } = useLocationUser("30023", post?.author_id);
+  const { user, fullName: authorName } = useLocationUser("30023", post?.author_id);
 
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
@@ -97,7 +97,7 @@ const PostScreen = () => {
           {!isLoading && post ? (
             <>
               <View style={styles.header}>
-                <Avatar avatarUrl={""}></Avatar>
+                <Avatar avatarUrl={user?.avatar_url ?? ""}></Avatar>
                 <Text style={styles.author} numberOfLines={1}>
                   {authorName}
                 </Text>

@@ -7,6 +7,7 @@ export interface GetUsersByLocationId {
 
 export interface User {
   id: string;
+  avatar_url: string | null;
   email: string;
   first_name: string;
   last_name: string;

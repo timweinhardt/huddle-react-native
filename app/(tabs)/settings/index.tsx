@@ -20,7 +20,6 @@ const SettingsScreen = () => {
 
   const fullName = `${user?.given_name ?? ""} ${user?.family_name ?? ""}`;
   const topRole = getHighestRole(userRoles);
-
   return (
     <>
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -29,6 +28,7 @@ const SettingsScreen = () => {
           name={fullName}
           role={topRole ? RoleLabels[topRole] : ""}
           locations={locationIds}
+          avatarUrl={user?.picture}
         />
         <SubHeading>Settings</SubHeading>
         <TouchableCard onPress={() => router.navigate("/settings/account-information")} activeOpacity={0.6}>

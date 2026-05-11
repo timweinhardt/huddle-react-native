@@ -5,6 +5,7 @@ import {
   getCurrentUser,
   signIn,
   signOut,
+  updateUserAttributes,
 } from "aws-amplify/auth";
 
 export const authService = {
@@ -40,5 +41,25 @@ export const authService = {
     } catch {
       return null;
     }
+  },
+  updateUserAttributes: async (firstName: string | undefined, lastName: string | undefined, email: string | undefined, profilePicture: string | undefined = undefined) => {
+    let userAttributes: Record<string, string> = {};
+    if (firstName) {
+      userAttributes.given_name = firstName;
+    }
+    if (lastName) {
+      userAttributes.family_name = lastName;
+    }
+    if (email) {
+      userAttributes.email = email;
+    }
+    if (profilePicture) {
+      // Fragment is not sent over HTTP (safe for presigned URLs) but changes the stored string so clients refetch.
+      const base = profilePicture.split("#")[0];
+      userAttributes.picture = `${base}#t=${Date.now()}`;
+    }
+    return await updateUserAttributes({
+      userAttributes: userAttributes,
+    });
   },
 };

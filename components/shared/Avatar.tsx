@@ -1,18 +1,32 @@
 import UserIcon from "@/assets/icons/user.svg";
 import { Colors } from "@/constants/theme";
+import { Image, ImageProps } from "expo-image";
 import React from "react";
-import { Image, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-interface PostCardProps {
-  avatarUrl?: string;
+type AvatarProps = {
+  avatarUrl?: string | ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
-}
+  cachePolicy?: ImageProps["cachePolicy"];
+};
 
-const PostCard: React.FC<PostCardProps> = ({ avatarUrl, style }) => {
+const Avatar: React.FC<AvatarProps> = ({
+  avatarUrl,
+  style,
+  cachePolicy = "disk",
+}) => {
   return (
     <View style={[styles.container, style]}>
       {avatarUrl ? (
-        <Image source={{ uri: avatarUrl }} style={styles.image} />
+        <Image
+          source={avatarUrl}
+          style={styles.image}
+          contentFit="cover"
+          cachePolicy={cachePolicy}
+          onError={() => {
+            console.log("error loading avatar");
+          }}
+        />
       ) : (
         <UserIcon style={styles.icon} />
       )}
@@ -44,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostCard;
+export default Avatar;

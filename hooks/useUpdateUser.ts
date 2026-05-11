@@ -1,0 +1,31 @@
+import { authService } from "@/api/services/authService";
+import { userService } from "@/api/services/userService";
+import { useAuthContext } from "@/context/AuthContext";
+import { queryClient } from "@/queryClient";
+import { useMutation } from "@tanstack/react-query";
+
+type UserInformationFormValues = {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePicture: { base64: string; extension: string } | undefined;
+};
+
+export function useUpdateUser() {
+  const { setUser } = useAuthContext();
+
+  return useMutation({
+    mutationFn: ({ userId, firstName, lastName, email, profilePicture }: UserInformationFormValues) =>
+      userService.updateUser(userId, firstName.trim(), lastName.trim(), email.trim(), profilePicture),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ["locationUsers"],
+      });
+      const attributes = await authService.fetchUserAttributes();
+      if (attributes) {
+        setUser(attributes);
+      }
+    },
+  });
+}

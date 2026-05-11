@@ -31,7 +31,7 @@ const HomeScreen = () => {
     if (!users) return {};
 
     return Object.fromEntries(
-      users.map((user) => [user.id, `${user.first_name} ${user.last_name}`]),
+      users.map((user) => [user.id, { name: `${user.first_name} ${user.last_name}`, avatar_url: user.avatar_url ?? undefined }]),
     );
   }, [users]);
 
@@ -93,7 +93,8 @@ const HomeScreen = () => {
         renderItem={({ item }) => (
           <PostCard
             postId={item.id}
-            authorName={userMap[item.author_id] ?? ""}
+            authorName={userMap[item.author_id]?.name ?? ""}
+            avatarUrl={userMap[item.author_id]?.avatar_url}
             title={item.title}
             date={item.created_at}
             content={item.content}
