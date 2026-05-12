@@ -31,9 +31,14 @@ const SettingsScreen = () => {
           avatarUrl={user?.picture}
         />
         <SubHeading>Settings</SubHeading>
-        <TouchableCard onPress={() => router.navigate("/settings/account-information")} activeOpacity={0.6}>
-          <Text style={styles.buttonText}>Account Information</Text>
-        </TouchableCard>
+        <View style={styles.settingsButtonsContainer}>
+          <TouchableCard onPress={() => router.navigate("/settings/account-information")} activeOpacity={0.6}>
+            <Text style={styles.buttonText}>Account Information</Text>
+          </TouchableCard>
+          <TouchableCard onPress={() => router.navigate("/settings/team-management")} activeOpacity={0.6}>
+            <Text style={styles.buttonText}>Team Management</Text>
+          </TouchableCard>
+        </View>
       </View>
       <View style={styles.footer}>
         <LogoutButton />
@@ -46,6 +51,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
+  },
+  settingsButtonsContainer: {
+    gap: 10,
   },
   footer: {
     padding: 20,

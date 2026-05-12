@@ -8,19 +8,21 @@ type AvatarProps = {
   avatarUrl?: string | ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
   cachePolicy?: ImageProps["cachePolicy"];
+  size?: number;
 };
 
 const Avatar: React.FC<AvatarProps> = ({
   avatarUrl,
   style,
   cachePolicy = "disk",
+  size = 28,
 }) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, { width: size, height: size }, style]}>
       {avatarUrl ? (
         <Image
           source={avatarUrl}
-          style={styles.image}
+          style={[{ width: size, height: size }]}
           contentFit="cover"
           cachePolicy={cachePolicy}
           onError={() => {
@@ -28,7 +30,7 @@ const Avatar: React.FC<AvatarProps> = ({
           }}
         />
       ) : (
-        <UserIcon style={styles.icon} />
+          <UserIcon width={size * 0.75} height={size * 0.75} color={Colors.muted} />
       )}
     </View>
   );
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     backgroundColor: Colors.border,
-    borderRadius: 25,
+    borderRadius: 128,
     borderWidth: 0.5,
     borderColor: Colors.border,
     borderStyle: "solid",
@@ -47,13 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
   },
-  image: {
-    width: 28,
-    height: 28,
-  },
   icon: {
-    maxWidth: 22,
-    maxHeight: 22,
     color: Colors.muted,
   },
 });

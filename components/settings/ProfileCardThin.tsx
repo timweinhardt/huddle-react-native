@@ -22,16 +22,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   return (
     <Card style={[styles.card, style]}>
       <View style={styles.header}>
-        <Avatar avatarUrl={avatarUrl} />
-        <Text style={styles.name} numberOfLines={1}>
-          {name}
-        </Text>
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.role}>{role}</Text>
-        <Text style={styles.locations}>
-          Location{locations.length > 1 ? "s" : ""} {locations.join(", ")}
-        </Text>
+        <Avatar avatarUrl={avatarUrl} size={42}/>
+        <View style={styles.nameContainer}>
+          <Text style={styles.name} numberOfLines={1}>
+            {name}
+          </Text>
+          <Text style={styles.role}>{role}</Text>
+        </View>
       </View>
     </Card>
   );
@@ -42,14 +39,17 @@ const styles = StyleSheet.create({
     borderRadius: 9,
   },
   card: {
-    marginBottom: 20,
+    marginBottom: 12,
     padding: 15,
     gap: 9,
+  },
+  nameContainer: {
+    gap: 4,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 7,
+    gap: 12,
   },
   footer: {
     gap: 4,
@@ -60,9 +60,9 @@ const styles = StyleSheet.create({
     color: TextStyles.title.color,
   },
   role: {
-    fontFamily: TextStyles.meta.fontFamily,
-    fontSize: TextStyles.meta.fontSize,
-    color: TextStyles.meta.color,
+    fontFamily: TextStyles.subTitle.fontFamily,
+    fontSize: TextStyles.subTitle.fontSize,
+    color: TextStyles.subTitle.color,
   },
   locations: {
     fontFamily: TextStyles.meta.fontFamily,

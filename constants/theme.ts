@@ -100,6 +100,11 @@ export const TextStyles = {
     fontSize: 18,
     color: Colors.textPrimary,
   },
+  subTitle: {
+    fontFamily: Apercu.medium,
+    fontSize: 16,
+    color: Colors.textSecondary,
+  },
   meta: {
     fontFamily: Apercu.medium,
     fontSize: 14,

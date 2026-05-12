@@ -1,16 +1,28 @@
 import UserInformationForm from "@/components/settings/UserInformationForm";
+import Spinner from "@/components/ui/Spinner";
 import { useAuthContext } from "@/context/AuthContext";
+import { useLocationUsers } from "@/hooks/useLocationUsers";
+import { User } from "@/types/User";
 import React from "react";
 
-const SettingsScreen = () => {
-    const { user } = useAuthContext();
+const AccountInformationScreen = () => {
+    const { user: authUser } = useAuthContext();
+
+    const { data: users, isLoading: isUsersLoading } = useLocationUsers("30023");
+    const user = users?.find((user: User) => user.id === authUser?.sub);
+
+    if (!user) {
+        return null;
+    }
+
     return (
         <>
-            <UserInformationForm user={user} />
+            <Spinner isVisible={isUsersLoading} />
+            <UserInformationForm user={user} isOwner={true} />
         </>
     );
 };
 
 
 
-export default SettingsScreen;
+export default AccountInformationScreen;

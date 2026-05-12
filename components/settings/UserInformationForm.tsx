@@ -1,25 +1,26 @@
 import ChevronLeftIcon from "@/assets/icons/chevron-left.svg";
+import Avatar from "@/components/shared/Avatar";
+import ErrorModal from "@/components/shared/ErrorModal";
+import RouteHeading from "@/components/shared/RouteHeading";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Spinner from "@/components/ui/Spinner";
+import TextField from "@/components/ui/TextField";
 import { TextStyles } from "@/constants/theme";
 import pickProfilePicture from "@/hooks/useImagePicker";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { User } from "@/types/User";
 import { isValidEmail } from "@/utils/string";
-import { UserAttributeKey } from "aws-amplify/auth";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Avatar from "../shared/Avatar";
-import ErrorModal from "../shared/ErrorModal";
-import RouteHeading from "../shared/RouteHeading";
-import Button from "../ui/Button";
-import Card from "../ui/Card";
-import Spinner from "../ui/Spinner";
-import TextField from "../ui/TextField";
 
 type UserInformationFormProps = {
-    user: Partial<Record<UserAttributeKey, string>> | null;
+    user: User;
+    isOwner: boolean;
 };
 
 type UserInformationFormValues = {
@@ -29,7 +30,7 @@ type UserInformationFormValues = {
     profilePicture: { base64: string; extension: string } | undefined;
 };
 
-const UserInformationForm = ({ user }: UserInformationFormProps) => {
+const UserInformationForm = ({ user, isOwner }: UserInformationFormProps) => {
     const insets = useSafeAreaInsets();
 
     const [error, setError] = useState("");
@@ -40,13 +41,11 @@ const UserInformationForm = ({ user }: UserInformationFormProps) => {
     const {
         control,
         handleSubmit,
-        watch,
         setError: setFieldError,
-        clearErrors,
         setValue,
-        formState: { isValid, errors, isDirty },
+        formState: { errors },
     } = useForm<UserInformationFormValues>({
-        defaultValues: { firstName: user?.given_name || "", lastName: user?.family_name || "", email: user?.email || "", profilePicture: undefined },
+        defaultValues: { firstName: user?.first_name || "", lastName: user?.last_name || "", email: user?.email || "", profilePicture: undefined },
         reValidateMode: "onSubmit",
     });
 
@@ -72,12 +71,13 @@ const UserInformationForm = ({ user }: UserInformationFormProps) => {
     }: UserInformationFormValues) => {
         Keyboard.dismiss();
 
-        if (!user?.sub) {
+        if (!user?.id) {
             return;
         }
         updateUser(
             {
-                userId: user.sub,
+                isOwner,
+                userId: user.id,
                 firstName,
                 lastName,
                 email,

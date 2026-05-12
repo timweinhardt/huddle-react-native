@@ -4,9 +4,26 @@ export default function SettingsLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-
       <Stack.Screen
         name="account-information"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="team-management"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="[id]/index"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="[id]/edit"
         options={{
           headerShown: false,
         }}

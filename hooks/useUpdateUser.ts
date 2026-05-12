@@ -3,8 +3,10 @@ import { userService } from "@/api/services/userService";
 import { useAuthContext } from "@/context/AuthContext";
 import { queryClient } from "@/queryClient";
 import { useMutation } from "@tanstack/react-query";
+import { locationUsersKey } from "./useLocationUsers";
 
 type UserInformationFormValues = {
+  isOwner: boolean;
   userId: string;
   firstName: string;
   lastName: string;
@@ -16,11 +18,11 @@ export function useUpdateUser() {
   const { setUser } = useAuthContext();
 
   return useMutation({
-    mutationFn: ({ userId, firstName, lastName, email, profilePicture }: UserInformationFormValues) =>
-      userService.updateUser(userId, firstName.trim(), lastName.trim(), email.trim(), profilePicture),
+    mutationFn: ({ isOwner, userId, firstName, lastName, email, profilePicture }: UserInformationFormValues) =>
+      userService.updateUser(isOwner, userId, firstName.trim(), lastName.trim(), email.trim(), profilePicture),
     onSuccess: async () => {
       queryClient.invalidateQueries({
-        queryKey: ["locationUsers"],
+        queryKey: locationUsersKey("30023"),
       });
       const attributes = await authService.fetchUserAttributes();
       if (attributes) {

@@ -54,9 +54,7 @@ export const authService = {
       userAttributes.email = email;
     }
     if (profilePicture) {
-      // Fragment is not sent over HTTP (safe for presigned URLs) but changes the stored string so clients refetch.
-      const base = profilePicture.split("#")[0];
-      userAttributes.picture = `${base}#t=${Date.now()}`;
+      userAttributes.picture = profilePicture;
     }
     return await updateUserAttributes({
       userAttributes: userAttributes,

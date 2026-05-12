@@ -13,7 +13,6 @@ const SubHeading: React.FC<SubHeadingProps> = ({ children, style }) => {
 
 const styles = StyleSheet.create({
   text: {
-    marginTop: 20,
     marginBottom: 15,
     color: TextStyles.subHeading.color,
     fontFamily: TextStyles.subHeading.fontFamily,
