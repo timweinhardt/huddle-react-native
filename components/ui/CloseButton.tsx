@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({
       onPress={onPress}
       style={[styles.container, style]}
     >
-      <CloseOutlineIcon width={34} height={34} fill={Colors.textPrimary} />
+      <CloseOutlineIcon width={34} height={34} color={Colors.textPrimary} />
     </TouchableOpacity>
   );
 };
