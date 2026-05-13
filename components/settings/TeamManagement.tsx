@@ -8,22 +8,18 @@ import Spinner from "@/components/ui/Spinner";
 import { Colors, TextStyles } from "@/constants/theme";
 import { useLocationUsers } from "@/hooks/useLocationUsers";
 import { RoleLabels } from "@/types/Membership";
-import { UserAttributeKey } from "aws-amplify/auth";
 import { router } from "expo-router";
 import { useState } from "react";
 import { RefreshControl, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type TeamManagementProps = {
-    user: Partial<Record<UserAttributeKey, string>> | null;
-};
+import PlusIcon from "@/assets/icons/plus.svg";
 
-const TeamManagement = ({ user }: TeamManagementProps) => {
+const TeamManagement = () => {
     const insets = useSafeAreaInsets();
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
     const { data: users, isLoading: isUsersLoading, refetch, isRefetching } = useLocationUsers("30023");
 
     const activeUsers = users?.filter((user) => user.is_active && user.is_confirmed) ?? [];
@@ -31,6 +27,9 @@ const TeamManagement = ({ user }: TeamManagementProps) => {
     const locationId = "30023";
     const handleBackButton = () => {
         router.back();
+    };
+    const handleInviteUser = () => {
+        router.navigate("/settings/invite");
     };
 
     const sections = [
@@ -73,14 +72,23 @@ const TeamManagement = ({ user }: TeamManagementProps) => {
                 keyExtractor={(item, index) => item.id ?? `${item.first_name}-${item.last_name}-${index}-${item.avatar_url}`}
                 ListHeaderComponent={() => (
                     <>
-                        <Button
-                            text="Back"
-                            onPress={handleBackButton}
-                            style={styles.backButton}
-                            contentStyle={styles.backButtonContent}
-                            variant="transparent"
-                            iconLeft={ChevronLeftIcon}
-                        />
+                        <View style={styles.headerButtons}>
+                            <Button
+                                text="Back"
+                                onPress={handleBackButton}
+                                style={styles.backButton}
+                                contentStyle={styles.backButtonContent}
+                                variant="transparent"
+                                iconLeft={ChevronLeftIcon}
+                            />
+                            <Button
+                                text="Invite Member"
+                                onPress={handleInviteUser}
+                                style={styles.backButton}
+                                variant='secondary'
+                                iconLeft={PlusIcon}
+                            />
+                        </View>
                         <RouteHeading>Team Management</RouteHeading>
                     </>
                 )}
@@ -107,7 +115,13 @@ const TeamManagement = ({ user }: TeamManagementProps) => {
     );
 };
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
+    headerButtons: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+    },
     updateProfileButton: {
         marginTop: 20
     },
@@ -132,7 +146,6 @@ const styles = StyleSheet.create({
     backButton: {
         marginTop: 30,
         alignSelf: "flex-start",
-        marginBottom: 10,
     },
     backButtonContent: {
         paddingLeft: 0,

@@ -17,6 +17,12 @@ export default function SettingsLayout() {
         }}
       />
       <Stack.Screen
+        name="invite"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="[id]/index"
         options={{
           headerShown: false,

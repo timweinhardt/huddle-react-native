@@ -33,3 +33,8 @@ export interface UserMembership {
   location_id: string;
   roles: Role[];
 }
+
+export interface DeleteMembershipRequest {
+  userId: string;
+  location_id: string;
+}

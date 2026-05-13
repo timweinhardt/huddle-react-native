@@ -1,7 +1,7 @@
 import UserIcon from "@/assets/icons/user.svg";
 import { Colors } from "@/constants/theme";
 import { Image, ImageProps } from "expo-image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 type AvatarProps = {
@@ -17,20 +17,26 @@ const Avatar: React.FC<AvatarProps> = ({
   cachePolicy = "disk",
   size = 28,
 }) => {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [avatarUrl]);
+
+  const showImage = Boolean(avatarUrl) && !hasError;
+
   return (
     <View style={[styles.container, { width: size, height: size }, style]}>
-      {avatarUrl ? (
+      {showImage ? (
         <Image
           source={avatarUrl}
           style={[{ width: size, height: size }]}
           contentFit="cover"
           cachePolicy={cachePolicy}
-          onError={() => {
-            console.log("error loading avatar");
-          }}
+          onError={() => setHasError(true)}
         />
       ) : (
-          <UserIcon width={size * 0.75} height={size * 0.75} color={Colors.muted} />
+        <UserIcon width={size * 0.75} height={size * 0.75} color={Colors.muted} />
       )}
     </View>
   );

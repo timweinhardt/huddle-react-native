@@ -19,7 +19,7 @@ export function useUpdateUser() {
 
   return useMutation({
     mutationFn: ({ isOwner, userId, firstName, lastName, email, profilePicture }: UserInformationFormValues) =>
-      userService.updateUser(isOwner, userId, firstName.trim(), lastName.trim(), email.trim(), profilePicture),
+      userService.updateUser(isOwner, userId, { first_name: firstName.trim(), last_name: lastName.trim(), email: email.trim() }, profilePicture),
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: locationUsersKey("30023"),

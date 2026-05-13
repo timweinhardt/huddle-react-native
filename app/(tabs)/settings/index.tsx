@@ -1,4 +1,5 @@
 import LogoutButton from "@/components/auth/LogoutButton";
+import ClearCacheButton from "@/components/settings/ClearCacheButton";
 import ProfileCard from "@/components/settings/ProfileCard";
 import Heading from "@/components/shared/Heading";
 import SubHeading from "@/components/shared/SubHeading";
@@ -19,7 +20,7 @@ const SettingsScreen = () => {
   const { roles: userRoles, locationIds } = useLocationUser("30023", user?.sub);
 
   const fullName = `${user?.given_name ?? ""} ${user?.family_name ?? ""}`;
-  const topRole = getHighestRole(userRoles);
+  const topRole = getHighestRole(userRoles ?? []);
   return (
     <>
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -38,6 +39,7 @@ const SettingsScreen = () => {
           <TouchableCard onPress={() => router.navigate("/settings/team-management")} activeOpacity={0.6}>
             <Text style={styles.buttonText}>Team Management</Text>
           </TouchableCard>
+          <ClearCacheButton />
         </View>
       </View>
       <View style={styles.footer}>
