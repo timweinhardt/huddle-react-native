@@ -1,12 +1,17 @@
 import LogoutButton from "@/components/auth/LogoutButton";
+import ClearCacheButton from "@/components/settings/ClearCacheButton";
 import ProfileCard from "@/components/settings/ProfileCard";
 import Heading from "@/components/shared/Heading";
+import SubHeading from "@/components/shared/SubHeading";
+import TouchableCard from "@/components/ui/TouchableCard";
+import { TextStyles } from "@/constants/theme";
 import { useAuthContext } from "@/context/AuthContext";
 import { useLocationUser } from "@/hooks/useLocationUsers";
 import { RoleLabels } from "@/types/Membership";
 import { getHighestRole } from "@/utils/roles";
+import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SettingsScreen = () => {
@@ -15,8 +20,7 @@ const SettingsScreen = () => {
   const { roles: userRoles, locationIds } = useLocationUser("30023", user?.sub);
 
   const fullName = `${user?.given_name ?? ""} ${user?.family_name ?? ""}`;
-  const topRole = getHighestRole(userRoles);
-
+  const topRole = getHighestRole(userRoles ?? []);
   return (
     <>
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -25,7 +29,18 @@ const SettingsScreen = () => {
           name={fullName}
           role={topRole ? RoleLabels[topRole] : ""}
           locations={locationIds}
+          avatarUrl={user?.picture}
         />
+        <SubHeading>Settings</SubHeading>
+        <View style={styles.settingsButtonsContainer}>
+          <TouchableCard onPress={() => router.navigate("/settings/account-information")} activeOpacity={0.6}>
+            <Text style={styles.buttonText}>Account Information</Text>
+          </TouchableCard>
+          <TouchableCard onPress={() => router.navigate("/settings/team-management")} activeOpacity={0.6}>
+            <Text style={styles.buttonText}>Team Management</Text>
+          </TouchableCard>
+          <ClearCacheButton />
+        </View>
       </View>
       <View style={styles.footer}>
         <LogoutButton />
@@ -39,9 +54,17 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
   },
+  settingsButtonsContainer: {
+    gap: 10,
+  },
   footer: {
     padding: 20,
     flexDirection: "row",
+  },
+  buttonText: {
+    fontFamily: TextStyles.body.fontFamily,
+    fontSize: TextStyles.body.fontSize,
+    color: TextStyles.body.color,
   },
 });
 

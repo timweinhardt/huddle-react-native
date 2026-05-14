@@ -1,4 +1,5 @@
 import { userService } from "@/api/services/userService";
+import { LocationUser } from "@/types/User";
 import { useQuery } from "@tanstack/react-query";
 
 export const locationUsersKey = (locationId: string) => [
@@ -15,7 +16,7 @@ export function useLocationUsers(locationId: string) {
   });
 }
 
-export function useLocationUser(locationId: string, userId?: string) {
+export function useLocationUser(locationId: string, userId?: string): LocationUser {
   const { data } = useLocationUsers(locationId);
 
   const user = data?.find((u) => u.id === userId);

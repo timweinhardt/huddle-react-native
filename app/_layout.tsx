@@ -5,14 +5,16 @@ import "react-native-reanimated";
 import { CustomFonts } from "@/constants/theme";
 import { AuthProvider, useAuthContext } from "@/context/AuthContext";
 import { useLocationUsers } from "@/hooks/useLocationUsers";
-import { queryClient } from "@/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { asyncStoragePersister, queryClient } from "@/queryClient";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Amplify } from "aws-amplify";
 import React, { useEffect } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as Notifications from "expo-notifications";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -64,14 +66,18 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <KeyboardProvider>
-          <SafeAreaProvider>
-            <InitialLayout />
-          </SafeAreaProvider>
-        </KeyboardProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PersistQueryClientProvider persistOptions={{ persister: asyncStoragePersister }} client={queryClient}>
+        <AuthProvider>
+          <BottomSheetModalProvider>
+            <KeyboardProvider>
+              <SafeAreaProvider>
+                <InitialLayout />
+              </SafeAreaProvider>
+            </KeyboardProvider>
+          </BottomSheetModalProvider>
+        </AuthProvider>
+      </PersistQueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

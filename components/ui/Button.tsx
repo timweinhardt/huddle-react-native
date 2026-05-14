@@ -40,6 +40,17 @@ const VARIANT_CONFIG = {
     activeOpacity: 0.6,
     disabledStyle: {},
   },
+  secondaryMono: {
+    contentColor: Colors.secondary,
+    containerStyle: {
+      backgroundColor: "#ffffff",
+      borderWidth: 1,
+      borderColor: Colors.border,
+    },
+    useGradient: false,
+    activeOpacity: 0.6,
+    disabledStyle: {},
+  },
   transparent: {
     contentColor: Colors.primary,
     containerStyle: {},
