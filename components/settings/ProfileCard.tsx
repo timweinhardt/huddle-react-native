@@ -1,6 +1,7 @@
 import Avatar from "@/components/shared/Avatar";
 import Card from "@/components/ui/Card";
 import { TextStyles } from "@/constants/theme";
+import { LocationLabels } from "@/types/Location";
 import React from "react";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
@@ -30,7 +31,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       <View style={styles.footer}>
         <Text style={styles.role}>{role}</Text>
         <Text style={styles.locations}>
-          Location{locations.length > 1 ? "s" : ""} {locations.join(", ")}
+          {locations.map((location) => LocationLabels[location] + " " + location).join(", ")}
         </Text>
       </View>
     </Card>
