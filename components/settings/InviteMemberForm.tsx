@@ -55,7 +55,6 @@ const InviteMemberForm = () => {
     };
 
     const onSubmit = (data: InviteUserRequest) => {
-        console.log(data);
         inviteUser(data, {
             onSuccess: () => {
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

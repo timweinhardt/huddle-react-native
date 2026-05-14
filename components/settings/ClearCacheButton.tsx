@@ -13,7 +13,7 @@ const ClearCacheButton = () => {
     }
 
     Alert.alert(
-      "Clear cache",
+      "Clear Cache",
       "This removes cached app data and downloaded images. Content may need to reload.",
       [
         { text: "Cancel", style: "cancel" },
@@ -24,7 +24,7 @@ const ClearCacheButton = () => {
 
   return (
     <TouchableCard onPress={handlePress} activeOpacity={0.6}>
-      <Text style={styles.buttonText}>{isPending ? "Clearing..." : "Clear cache"}</Text>
+      <Text style={styles.buttonText}>Clear Cache</Text>
     </TouchableCard>
   );
 };
