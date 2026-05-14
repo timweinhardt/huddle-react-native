@@ -95,6 +95,7 @@ const TeamManagement = () => {
                 renderSectionHeader={({ section: { title } }) => (
                     <SubHeading>{title}</SubHeading>
                 )}
+                stickySectionHeadersEnabled={false}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => router.navigate(`/settings/${item.id}`)} activeOpacity={0.6}>
                         <ProfileCardThin
